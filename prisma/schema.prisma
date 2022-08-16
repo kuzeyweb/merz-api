@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model userleaders {
+  id       Int @id @default(autoincrement())
+  userId   Int
+  leaderId Int
+
+  @@index([userId], map: "KullaniciIndex")
+  @@index([leaderId], map: "YoneticiIndex")
+}
+
+model users {
+  id        Int        @id @default(autoincrement())
+  firstName String     @db.VarChar(150)
+  lastName  String     @db.VarChar(150)
+  email     String     @unique(map: "email") @db.VarChar(150)
+  role      users_role
+}
+
+enum users_role {
+  Director
+  Lead
+  Editor
+  EMPTY_ENUM_VALUE @map("")
+}
